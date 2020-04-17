@@ -1,3 +1,4 @@
 bin
 obj
 appsettings.json
+/.vs/skinet/v16/Server/sqlite3
