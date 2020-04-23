@@ -14,6 +14,9 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Core.Interfaces;
 using Infrastructure.Data;
+using AutoMapper;
+using API.Helpers;
+
 namespace API
 {
     public class Startup
@@ -32,6 +35,9 @@ namespace API
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddScoped<IProductRepository,ProductRepository>();
+            services.AddScoped(typeof(IGenericRepository<>), (typeof(GenericRepository<>)));
+            services.AddAutoMapper(typeof(MappingProfiles));
+
             services.AddControllers();
             services.AddDbContext<StoreContext>(x => x.UseSqlServer(_configuration.GetConnectionString("DefaultConnection1")));
         
@@ -47,8 +53,9 @@ namespace API
 
             app.UseHttpsRedirection();
 
+         
             app.UseRouting();
-
+            app.UseStaticFiles();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
