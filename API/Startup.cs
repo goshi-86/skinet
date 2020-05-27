@@ -19,6 +19,8 @@ using API.Middleware;
 using API.Errors;
 using Microsoft.OpenApi.Models;
 using API.Extensions;
+using StackExchange.Redis;
+using Infrastructure.Identity;
 
 namespace API
 {
@@ -42,11 +44,26 @@ namespace API
 
             services.AddControllers();
             services.AddApplicationServices();
+            services.AddIdentityServices(_configuration);
             services.AddSwaggerDocumentation();
             services.AddDbContext<StoreContext>(x => x.UseSqlServer(_configuration.GetConnectionString("DefaultConnection1")));
+            services.AddDbContext<AppIdentityDbContext>(x => x.UseSqlServer(_configuration.GetConnectionString("IdentityConnection")));
+
+            // services.AddDbContext<AppIdentityDbContext>(x =>
+            // {
+            //    x.UseSqlServer(_configuration.GetConnectionString("IdentityConnection"));
+
+            // }
+            // );
+            //services.AddSingleton<ConnectionMultiplexer>(c =>
+            // {
+            //   var configuration = ConfigurationOptions.Parse(_configuration.GetConnectionString("Redis")
+            //    , true);
+            //   return ConnectionMultiplexer.Connect(configuration);
+
+            //  });
 
 
-           
 
         }
 
@@ -68,6 +85,8 @@ namespace API
          
             app.UseRouting();
             app.UseStaticFiles();
+
+            app.UseAuthentication();
             app.UseAuthorization();
             app.UseSwaggerDocumentation();
 

@@ -3,6 +3,9 @@
 dotnet ef migrations add InitialCreate  -p Infrastructure -s API
 dotnet ef migrations remove -p Infrastructure -s API
 
+dotnet ef migrations add IdentityInitial -p Infrastructure -s API -o Identity/Migrations -c AppIdentityDbContext
+dotnet ef migrations remove -p Infrastructure -s API -c AppIdentityDbContext
+
 For Updating and Removing DB:
 
 dotnet ef database update -p Infrastructure -s API
