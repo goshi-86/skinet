@@ -48,6 +48,10 @@ namespace API
             services.AddSwaggerDocumentation();
             services.AddDbContext<StoreContext>(x => x.UseSqlServer(_configuration.GetConnectionString("DefaultConnection1")));
             services.AddDbContext<AppIdentityDbContext>(x => x.UseSqlServer(_configuration.GetConnectionString("IdentityConnection")));
+            services.AddCors(c =>
+            {
+                c.AddPolicy("AllowOrigin", options => options.AllowAnyOrigin());
+            });
 
             // services.AddDbContext<AppIdentityDbContext>(x =>
             // {
@@ -74,7 +78,7 @@ namespace API
              {
                 app.UseDeveloperExceptionPage();
               }
-
+            app.UseCors(options => options.AllowAnyOrigin());
             app.UseMiddleware<ExceptionMiddleware>();
 
             app.UseStatusCodePagesWithReExecute("/error/{0}");
@@ -94,6 +98,7 @@ namespace API
             {
                 endpoints.MapControllers();
             });
+          
 
         }
     }
