@@ -21,6 +21,7 @@ namespace Core.Interfaces
 
         Task<T> GetEntityWithSpec1(List<Expression<Func<T, object>>> includes, Expression<Func<T, bool>> criteria);
 
+        Task<int> CountAsync(ISpecification<T> spec);
 
 
     }    
