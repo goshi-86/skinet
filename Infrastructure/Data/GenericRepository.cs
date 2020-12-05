@@ -44,6 +44,10 @@ namespace Infrastructure.Data
     
         public async Task<List<T>> ListAllAsync()
         {
+            return await _context.Set<T>().ToListAsync(); 
+        }
+        public async Task<List<T>> ListAllAsync_Test()
+        {
             return await _context.Set<T>().ToListAsync();
         }
 
