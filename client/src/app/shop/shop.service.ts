@@ -5,28 +5,36 @@ import { IPagination } from '../shared/models/paginations';
 import { IProduct } from '../shared/models/product';
 import { IProductType } from '../shared/models/productType';
 import {delay, map} from 'rxjs/operators';
+import { ShopParams } from '../shared/models/shopParams';
 @Injectable({
   providedIn: 'root'
 })
 export class ShopService {
 baseUrl = 'https://localhost:5001/api/';
   constructor(private http: HttpClient) { }
-  getProducts(brandId?: number, typeId?: number, sort?: string)
+  getProducts( shopParams:ShopParams)
   {
     let params = new HttpParams();
 
      // tslint:disable-next-line: align
-     if (brandId)
+     if (shopParams.brandId!=0)
      {
-      params = params.append('brandId', brandId.toString() );
+      params = params.append('brandId', shopParams.brandId.toString() );
       }
 
-    if (typeId)
+    if (shopParams.typeId!=0)
     {
-      params = params.append('typeId', typeId.toString() );
+      params = params.append('typeId', shopParams.typeId.toString() );
     }
-    params = params.append('sort', sort);
-    params = params.append('pagesize', '50' );
+   
+    params = params.append('sort', shopParams.sort);
+    params = params.append('pageSize', shopParams.pageSize.toString() );
+    params = params.append('pageIndex',shopParams.pageNumber.toString());
+
+    if (shopParams.search)
+    {
+      params = params.append('search', shopParams.search );
+    }
 
     return this.http.get<IPagination>(this.baseUrl + 'products', {observe: 'response', params})
     .pipe(
